@@ -2,7 +2,7 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework import status
 
 
@@ -45,3 +45,5 @@ class RegistrationView(CreateAPIView):
 class UserList(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    permission_classes = (IsAdminUser,)
