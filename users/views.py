@@ -1,11 +1,10 @@
-from users.models import *
-from users.serializers import *
 from django.db import transaction
-from django.db.utils import IntegrityError
-from django.http import Http404
+from django.contrib.auth.models import User
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
-from rest_framework import permissions, status
+from rest_framework import status
+
+from users.serializers import RegistrationSerializer, UserSerializer
 
 
 class RegistrationView(CreateAPIView):
@@ -14,9 +13,7 @@ class RegistrationView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(serializer.is_valid(raise_exception=True))
-        print(serializer)
-        print(serializer.data.get('username'))
+
         with transaction.atomic():
             obj = User.objects.create_user(
                 serializer.data['username'],

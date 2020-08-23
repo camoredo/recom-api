@@ -25,17 +25,17 @@ class CoverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cover
         fields = ['id', 'small_thumbnail', 'thumbnail',
-                  'small', 'medium', 'large', 'extra_large']
+                  'small', 'medium', 'large']
 
 
-class BookSerializer(serializers.ModelSerializer):
+class BookSerializer(serializers.Serializer):
     id = serializers.CharField(max_length=1000)
     etag = serializers.CharField(max_length=1000)
     title = serializers.CharField(max_length=1000)
-    description = serializers.CharField(max_length=1000)
-    authors = AuthorSerializer(many=True)
-    categories = CategorySerializer(required=False, many=True)
+    description = serializers.CharField(max_length=1000, required=False)
+    authors = AuthorSerializer(many=True, required=False)
+    categories = CategorySerializer(many=True, required=False)
     cover = CoverSerializer()
-    publisher = PublisherSerializer()
-    date_published = serializers.DateTimeField()
+    publisher = PublisherSerializer(required=False)
+    date_published = serializers.DateTimeField(required=False)
     link = serializers.DateTimeField()
