@@ -30,23 +30,26 @@ class Collection():
     def add_book(self, id):
         raw_book = self.google_books_service.get_book(id)
 
-        publisher = self.get_or_add_publisher(
-            raw_book['volumeInfo']['publisher'])
-
         cover = self.add_cover(
             raw_book['volumeInfo']['imageLinks'])
 
         book = Book.objects.create(
-            id=id, etag=raw_book['etag'],
+            id=id,
+            etag=raw_book['etag'],
             title=raw_book['volumeInfo']['title'],
-            cover=cover,
-            publisher=publisher,
-            date_published=raw_book['volumeInfo']['publishedDate'],
-            link=raw_book['volumeInfo']['infoLink']
+            link=raw_book['volumeInfo']['infoLink'],
+            cover=cover
         )
 
         if 'description' in raw_book['volumeInfo']:
-            book.description = raw_book['volumeInfo']['description'],
+            book.description = raw_book['volumeInfo']['description']
+
+        if 'publisher' in raw_book['volumeInfo']:
+            book.publisher = self.get_or_add_publisher(
+                raw_book['volumeInfo']['publisher'])
+
+        if 'publishedDate' in raw_book['volumeInfo']:
+            book.date_published = raw_book['volumeInfo']['publishedDate']
 
         if 'authors' in raw_book['volumeInfo']:
             for item in raw_book['volumeInfo']['authors']:
@@ -57,8 +60,8 @@ class Collection():
             for item in raw_book['volumeInfo']['categories']:
                 category = self.get_or_add_category(item)
                 book.categories.add(category)
-        book.save()
 
+        book.save()
         return book
 
     def add_cover(self, images):
@@ -68,16 +71,17 @@ class Collection():
             cover.small_thumbnail = images['smallThumbnail']
 
         if 'thumbnail' in images:
-            cover.small_thumbnail = images['thumbnail']
+            cover.thumbnail = images['thumbnail']
 
         if 'small' in images:
-            cover.small_thumbnail = images['small']
+            cover.small = images['small']
 
         if 'medium' in images:
-            cover.small_thumbnail = images['medium']
+            cover.medium = images['medium']
 
         if 'large' in images:
-            cover.small_thumbnail = images['large']
+            cover.large = images['large']
+
         cover.save()
         return cover
 

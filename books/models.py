@@ -34,7 +34,8 @@ class Book(models.Model):
         Publisher,
         related_name="books",
         on_delete=models.DO_NOTHING,
-        blank=True
+        blank=True,
+        null=True
     )
-    date_published = models.CharField(max_length=200)
+    date_published = models.CharField(max_length=200, blank=True, null=True)
     link = models.CharField(max_length=1000)
