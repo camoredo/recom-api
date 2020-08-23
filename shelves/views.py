@@ -32,6 +32,10 @@ class RecommendView(CreateAPIView):
             if 'message' in serializer.data:
                 obj.message = serializer.data['message']
 
+            if (not serializer.data['is_anonymous']
+                    and request.user.is_authenticated):
+                obj.from_user = request.user
+
             obj.save()
 
             recommdation_serializer = RecommendationSerializer(instance=obj)

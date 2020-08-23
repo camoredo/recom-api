@@ -11,7 +11,7 @@ class RecommendSerializer(serializers.Serializer):
     book_id = serializers.CharField(max_length=1000)
     to_user = serializers.IntegerField()
     message = serializers.CharField(max_length=1000, required=False)
-    is_anonymous = serializers.BooleanField(default=False)
+    is_anonymous = serializers.BooleanField(default=True)
 
     def validate_to_user(self, value):
         try:
