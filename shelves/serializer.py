@@ -30,9 +30,10 @@ class RecommendSerializer(serializers.Serializer):
 
 class RecommendationSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    book = BookSerializer()
-    to_user = UserSerializer()
-    from_user = UserSerializer(required=False)
-    message = serializers.CharField(max_length=1000, required=False)
+    book = BookSerializer(read_only=True)
+    to_user = UserSerializer(read_only=True)
+    from_user = UserSerializer(read_only=True, required=False)
+    message = serializers.CharField(
+        max_length=1000, read_only=True, required=False)
     status = serializers.ChoiceField(
         choices=RECOMMENDATION_STATUS_CHOICES, read_only=True)

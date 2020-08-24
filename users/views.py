@@ -42,7 +42,7 @@ class RegistrationView(CreateAPIView):
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserList(ListAPIView):
+class UserListView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
