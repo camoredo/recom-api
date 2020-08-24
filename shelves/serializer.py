@@ -36,4 +36,4 @@ class RecommendationSerializer(serializers.Serializer):
     message = serializers.CharField(
         max_length=1000, read_only=True, required=False)
     status = serializers.ChoiceField(
-        choices=RECOMMENDATION_STATUS_CHOICES, read_only=True)
+        choices=RECOMMENDATION_STATUS_CHOICES)

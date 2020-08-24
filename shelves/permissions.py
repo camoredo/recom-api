@@ -11,3 +11,12 @@ class IsAuthenticatedOrCreateOnly(permissions.BasePermission):
             return True
 
         return request.method == 'POST'
+
+
+class IsOwner(permissions.BasePermission):
+    """
+    Custom permission to only allow owners to access the object.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.to_user

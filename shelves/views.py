@@ -1,5 +1,8 @@
 from django.db import transaction
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -7,11 +10,11 @@ from rest_framework import status
 from books.models import Book
 from books.utils import Collection
 from shelves.models import Recommendation
-from shelves.permissions import IsAuthenticatedOrCreateOnly
+from shelves.permissions import IsAuthenticatedOrCreateOnly, IsOwner
 from shelves.serializer import RecommendationSerializer, RecommendSerializer
 
 
-class RecommendView(APIView):
+class RecommendationListView(APIView):
     permission_classes = (IsAuthenticatedOrCreateOnly,)
 
     def post(self, request, *args, **kwargs):
@@ -52,3 +55,14 @@ class RecommendView(APIView):
 
         return Response(
             serializer.data, status=status.HTTP_201_CREATED)
+
+
+class RecommendationView(RetrieveUpdateAPIView):
+    serializer_class = RecommendationSerializer
+
+    permission_classes = (IsOwner, )
+
+    def get_object(self):
+        obj = get_object_or_404(Recommendation, pk=self.kwargs['id'])
+        self.check_object_permissions(self.request, obj)
+        return obj
