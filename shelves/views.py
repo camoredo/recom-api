@@ -54,7 +54,7 @@ class RecommendationListView(APIView):
             request.user.recommendations, many=True)
 
         return Response(
-            serializer.data, status=status.HTTP_201_CREATED)
+            serializer.data, status=status.HTTP_200_OK)
 
 
 class RecommendationView(RetrieveUpdateAPIView):
@@ -66,3 +66,20 @@ class RecommendationView(RetrieveUpdateAPIView):
         obj = get_object_or_404(Recommendation, pk=self.kwargs['id'])
         self.check_object_permissions(self.request, obj)
         return obj
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+            obj = self.get_object()
+            print(obj)
+            obj.status = serializer.data['status']
+            obj.save()
+
+            recommendation_serializer = self.get_serializer(instance=obj)
+            return Response(
+                recommendation_serializer.data, status=status.HTTP_200_OK)
+        return Response({
+            'message': 'Failed to update recommendation'
+        }, status=status.HTTP_400_BAD_REQUEST)
