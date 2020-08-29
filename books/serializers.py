@@ -39,3 +39,7 @@ class BookSerializer(serializers.Serializer):
     publisher = PublisherSerializer(required=False)
     date_published = serializers.DateTimeField(required=False)
     link = serializers.DateTimeField()
+
+
+class QuerySerializer(serializers.Serializer):
+    query = serializers.CharField(min_length=1, max_length=200)

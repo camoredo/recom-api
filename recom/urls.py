@@ -4,6 +4,7 @@ from django.urls import include, path
 api_url_patterns = [
     path('users/', include('users.urls')),
     path('shelves/', include('shelves.urls')),
+    path('books/', include('books.urls')),
 ]
 
 
