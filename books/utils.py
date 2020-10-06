@@ -18,8 +18,10 @@ class GoogleBooksService():
             response = None
         return response
 
-    def search(self, query):
-        request = self.service.volumes().list(q=query)
+    def search(self, query, page=1):
+        startIndex = (page-1) * 40
+        request = self.service.volumes().list(
+            q=query, maxResults=40, startIndex=startIndex)
         return request.execute()
 
 

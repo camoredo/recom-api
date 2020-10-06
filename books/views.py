@@ -18,5 +18,6 @@ class SearchView(RetrieveAPIView):
         service = GoogleBooksService()
 
         return Response(
-            service.search(serializer.data['query']),
+            service.search(
+                query=serializer.data['query'], page=serializer.data['page']),
             status=status.HTTP_201_CREATED)

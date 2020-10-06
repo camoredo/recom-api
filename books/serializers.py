@@ -43,3 +43,4 @@ class BookSerializer(serializers.Serializer):
 
 class QuerySerializer(serializers.Serializer):
     query = serializers.CharField(min_length=1, max_length=200)
+    page = serializers.IntegerField(default=1, min_value=1)
