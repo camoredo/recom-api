@@ -1,12 +1,13 @@
 from django.db import transaction
 from django.contrib.auth.models import User
-from rest_framework.generics import CreateAPIView, ListAPIView
+from django.shortcuts import get_object_or_404
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework import status
 
 
-from users.serializers import RegistrationSerializer, UserSerializer
+from users.serializers import RegistrationSerializer, UserPublicSerializer, UserSerializer
 
 
 class LogoutView(CreateAPIView):
@@ -47,3 +48,10 @@ class UserListView(ListAPIView):
     serializer_class = UserSerializer
 
     permission_classes = (IsAdminUser,)
+
+
+class UserPublicView(RetrieveAPIView):
+    serializer_class = UserPublicSerializer
+
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs['username'])

@@ -13,7 +13,11 @@ class SearchView(RetrieveAPIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        query_params = {
+            "query": request.query_params.get('query'),
+            "page": request.query_params.get('page')
+        }
+        serializer = self.get_serializer(data=query_params)
         serializer.is_valid(raise_exception=True)
         service = GoogleBooksService()
 
